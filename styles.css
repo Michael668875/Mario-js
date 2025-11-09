@@ -39,7 +39,7 @@ body {
     width: 20px;
     height: 20px;
     background-image: url('https://i.imgur.com/Wb1qfhK.png');
-    // background-image: url("images/mario.png");
+    /* background-image: url("images/mario.png"); */
     z-index: 100;
 }
 
