@@ -17,7 +17,7 @@ let gameState = {
 let player = {
     element: document.getElementById('mario'),
     x: 50,
-    y: 300,
+    y: 340,
     width: 20,
     height: 20,
     velocityX: 0,
@@ -60,7 +60,7 @@ const levels = [
             { x: 350, y: 220, type: 'mushroom'}
         ],
         pipes: [
-            { x: 750, y: 300},
+            { x: 750, y: 320},
         ]
     },
     // level 2
@@ -92,7 +92,7 @@ const levels = [
             { x: 400, y: 220, type: 'mushroom' },
         ],
         pipes: [
-            { x: 750, y: 300 },
+            { x: 750, y: 320 },
         ]
     }
 ]
@@ -100,7 +100,7 @@ const levels = [
 // Initialise game
 function initGame() {
     loadLevel(gameState.level - 1)
-    // gameLoop()
+    gameLoop()
 }
 
 function loadLevel(levelIndex) {
@@ -117,7 +117,7 @@ function loadLevel(levelIndex) {
 
     // Reset player
     player.x = 50
-    player.y = 300
+    player.y = 340
     player.velocityX = 0
     player.velocityY = 0
     player.big = false
@@ -139,6 +139,88 @@ function loadLevel(levelIndex) {
             ...platformData,
             id: 'platform-' + index
         })
+    })
+
+    // create enemies
+    level.enemies.forEach((enemyData, index) => {
+        const enemy = createElement('div', `enemy ${enemyData.type}`, {
+            left: enemyData.x + 'px',
+            top: enemyData.y + 'px',
+        })
+        gameArea.appendChild(enemy)
+        gameObjects.enemies.push({
+            element: enemy,
+            x: enemyData.x + 'px',
+            y: enemyData.y + 'px',
+            width: 20,
+            height: 20,
+            direction: -1,
+            speed: ENEMY_SPEED,
+            id: 'enemy-' + index,
+            alive: true
+        })
+    })
+
+    // create coin
+    level.coins.forEach((coinData, index) => {
+        const coin = createElement('div', 'coin', {
+            left: coinData.x + 'px',
+            top: coinData.y + 'px',
+        })
+        gameArea.appendChild(coin)
+        gameObjects.coins.push({
+            element: coin,
+            x: coinData.x,
+            y: coinData.y,
+            width: 20,
+            height: 20,
+            collected: false,
+            id: 'coin-' + index
+        })
+    })
+
+    // create surprise blocks
+    level.surpriseBlocks.forEach((blockData, index) => {
+        const block = createElement('div', 'surprise-block', {
+            left: blockData.x + 'px',
+            top: blockData.y + 'px'
+        })
+        gameArea.appendChild(block)
+        gameObjects.surpriseBlocks.push({
+            element: block,
+            x: blockData.x,
+            y: blockData.y,
+            width: 20,
+            height: 20,
+            type: blockData.type,
+            hit: false,
+            id: 'block-' + index
+        })
+    })
+
+    // create pipes
+    level.pipes.forEach((pipeData, index) => {
+        const pipe = createElement('div', 'pipe', {
+            left: pipeData.x + 'px',
+            top: pipeData.y + 'px',
+        })
+        const pipeTopLeft = createElement('div', 'pipe-top')
+        const pipeTopRight = createElement('div', 'pipe-top-right')
+        const pipeBottomLeft = createElement('div', 'pipe-bottom')
+        const pipeBottomRight = createElement('div', 'pipe-bottom-right')
+
+        pipe.append(pipeTopLeft, pipeTopRight, pipeBottomLeft, pipeBottomRight)
+
+        gameArea.appendChild(pipe)
+        gameObjects.pipes.push({
+            element: pipe,
+            x: pipeData.x,
+            y: pipeData.y,
+            width: 40,
+            height: 40,
+            id: 'pipe-' + index
+        })
+
     })
 }
 
