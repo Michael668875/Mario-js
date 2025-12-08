@@ -150,8 +150,8 @@ function loadLevel(levelIndex) {
         gameArea.appendChild(enemy)
         gameObjects.enemies.push({
             element: enemy,
-            x: enemyData.x + 'px',
-            y: enemyData.y + 'px',
+            x: enemyData.x,
+            y: enemyData.y,
             width: 20,
             height: 20,
             direction: -1,
@@ -283,8 +283,94 @@ function gameLoop() {
 
 // Update game logic
 function update() {
+    console.log(gameState.keys)
+    // Handle left and right
+    if (gameState.keys['ArrowLeft'] || gameState.keys['KeyA']) {
+        player.velocityX = -MOVE_SPEED
+    } else if (gameState.keys['ArrowRight'] || gameState.keys['KeyD']) {
+        player.velocityX = MOVE_SPEED
+    } else {
+        player.velocityX *= 0.8
+    }
 
+    // Handle jumping
+    if (gameState.keys['Space'] && player.grounded) {
+        player.velocityY = JUMP_FORCE
+        player.grounded = false
+    }
+
+    // Apply gravity
+    if (!player.grounded) {
+        player.velocityY += GRAVITY
+    }
+
+    // Update player position
+    player.x += player.velocityX
+    player.y += player.velocityY
+
+    // Platform collision
+    player.grounded = false
+    for (let platform of gameObjects.platforms) {
+        if (checkCollision(player, platform)) {
+            if (player.velocityY > 0) { // falling
+                player.y = platform.y - player.height
+                player.velocityY = 0
+                player.grounded = true
+            }
+        }
+    }
+
+    // Pipe collision
+    for (let pipe of gameObjects.pipes) {
+        if (checkCollision(player, pipe)) {
+            if (player.velocityY > 0) { // falling into pipe
+                player.y = pipe.y - player.height
+                player.velocityY = 0
+                player.grounded = true
+            }
+        }
+    }
+
+    // Enemy movement and collision
+    for (let enemy of gameObjects.enemies) {
+        if (!enemy.alive) continue
+
+        enemy.x += enemy.speed * enemy.direction
+
+        let onPlatform = false
+        // Reverse direction at platform edges or boundaries
+        for (let platform of gameObjects.platforms) {
+            if (enemy.x + enemy.width > platform.x &&
+                enemy.x < platform.x + platform.width &&
+                enemy.y + enemy.height >= platform.y - 5 &&
+                enemy.y + enemy.height <= platform.y + 5
+            ) {
+                onPlatform = true
+                break
+
+            }
+        }
+
+        if (!onPlatform || enemy.x <= 0 || enemy.x >= 800 ) {
+            enemy.direction *= -1
+        }
+
+        updateElementPosition(enemy.element, enemy.x, enemy.y)
+    }
+
+
+
+    updateElementPosition(player.element, player.x, player.y)
 }
+
+
+function checkCollision(element1, element2) {
+    return element1.x < element2.x + element2.width &&
+        element1.x + element1.width > element2.x &&
+        element1.y < element2.y + element2.height &&
+        element1.y + element1.height > element2.y
+}
+
 
 // Start game
 initGame()
