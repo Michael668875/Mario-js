@@ -39,14 +39,16 @@ body {
     position: absolute;
     width: 20px;
     height: 20px;
+    background-size: cover;
+    background-repeat: no-repeat;
     background-image: url('https://i.imgur.com/Wb1qfhK.png');
     /* background-image: url("images/mario.png"); */
     z-index: 100;
 }
 
 #mario.big {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     background-image: url('https://i.imgur.com/Wb1qfhK.png');
 }
 
@@ -87,9 +89,18 @@ body {
 
 .enemy.purple {
     position: absolute;
+    background-size: cover;
+    background-repeat: no-repeat;
     width: 20px;
     height: 20px;
     background-image: url('https://i.imgur.com/SvV4ueD.png');
+}
+
+.mushroom {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-image: url('https://i.imgur.com/0wMd92p.png')
 }
 
 .coin {
@@ -133,6 +144,8 @@ body {
     position: absolute;
     top: 0;
     left: 0;
+    background-size: cover;
+    background-repeat: no-repeat;
     width: 20px;
     height: 20px;
     background-image: url('https://i.imgur.com/ReTPiWY.png');
@@ -142,6 +155,8 @@ body {
     position: absolute;
     top: 0;
     right: 0;
+    background-size: cover;
+    background-repeat: no-repeat;
     width: 20px;
     height: 20px;
     background-image: url('https://i.imgur.com/hj2GK4n.png');
@@ -151,6 +166,8 @@ body {
     position: absolute;
     bottom: 0;
     left: 0;
+    background-size: cover;
+    background-repeat: no-repeat;
     width: 20px;
     height: 20px;
     background-image: url('https://i.imgur.com/c1cYSbt.png');
@@ -160,6 +177,8 @@ body {
     position: absolute;
     bottom: 0;
     right: 0;
+    background-size: cover;
+    background-repeat: no-repeat;
     width: 20px;
     height: 20px;
     background-image: url('https://i.imgur.com/nqQ79eI.png');
